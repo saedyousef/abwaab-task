@@ -12,3 +12,4 @@ type User struct {
 	Password string `json:"password"`
 	Name     string `json:"name"`
 }
+

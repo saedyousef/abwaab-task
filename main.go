@@ -9,6 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/saedyousef/abwaab/models"
 )
 
 var (
@@ -16,6 +17,10 @@ var (
 )
 
 func main() {
+
+	// Connect to DB
+	models.ConnectDatabase()
+
 	router.POST("/login", Login)
 	log.Fatal(router.Run(":80"))
 }
