@@ -23,7 +23,8 @@ func main() {
 	models.ConnectDatabase()
 
 	router.POST("/login", Login)
-	log.Fatal(router.Run(":80"))
+	router.POST("/test", controllers.CreateTweet)
+	log.Fatal(router.Run(":8000"))
 }
 
 type User struct {

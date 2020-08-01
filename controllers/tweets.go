@@ -20,7 +20,7 @@ func CreateTweet(c *gin.Context) {
 	}
   
 	// Create book
-	tweet := models.TWeet{Body: input.Body}
+	tweet := models.Tweet{Body: input.Body}
 	models.DB.Create(&tweet)
   
 	c.JSON(http.StatusOK, gin.H{"data": tweet})
