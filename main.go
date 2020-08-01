@@ -9,7 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/saedyousef/abwaab/models"
+	"github.com/saedyousef/abwaab-task/models"
 )
 
 var (
