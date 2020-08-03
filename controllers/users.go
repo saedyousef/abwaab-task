@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
-	"github.com/saedyousef/abwaab-task/helper"
+	"github.com/saedyousef/abwaab-task/pwdhasher"
 	"github.com/saedyousef/abwaab-task/auth"
 )
 
@@ -40,7 +40,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 	// Create user
-	hashedPwd := helper.hashAndSalt([]byte(input.Password))
+	hashedPwd := pwdhasher.hashAndSalt([]byte(input.Password))
 	user := models.User{Username: input.Username, Password: hashedPwd, Name: input.Name}
 	models.DB.Create(&user)
   
@@ -62,7 +62,7 @@ func Login(c *gin.Context) {
 	}
 	
 	
-	if user.Username != input.Username || !helper.comparePasswords(user.Password, []byte(input.Password)) {
+	if user.Username != input.Username || !pwdhasher.comparePasswords(user.Password, []byte(input.Password)) {
 		c.JSON(http.StatusUnauthorized, "Please provide a valid credentials")
 		return
 	}
