@@ -2,10 +2,9 @@ package controllers
 
 import (
 	"net/http"
-	"log"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
+	"github.com/saedyousef/abwaab-task/helper"
 	"github.com/saedyousef/abwaab-task/auth"
 )
 
@@ -41,7 +40,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 	// Create user
-	hashedPwd := hashAndSalt([]byte(input.Password))
+	hashedPwd := helper.hashAndSalt([]byte(input.Password))
 	user := models.User{Username: input.Username, Password: hashedPwd, Name: input.Name}
 	models.DB.Create(&user)
   
@@ -63,7 +62,7 @@ func Login(c *gin.Context) {
 	}
 	
 	
-	if user.Username != input.Username || !comparePasswords(user.Password, []byte(input.Password)) {
+	if user.Username != input.Username || !helper.comparePasswords(user.Password, []byte(input.Password)) {
 		c.JSON(http.StatusUnauthorized, "Please provide a valid credentials")
 		return
 	}
@@ -78,26 +77,6 @@ func Login(c *gin.Context) {
 		"refresh_token": ts.RefreshToken,
 	}
 	c.JSON(http.StatusOK, tokens)
-}
-
-func hashAndSalt(pwd []byte) string {
-
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-	}
-	return string(hash)
-}
-func comparePasswords(hashedPwd string, plainPwd []byte) bool {
-
-	byteHash := []byte(hashedPwd)
-	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-
-	return true
 }
 
 func TokenAuthMiddleware() gin.HandlerFunc {
