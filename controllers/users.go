@@ -2,13 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"os"
-	"time"
 	"log"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
+	"github.com/saedyousef/abwaab-task/auth"
 )
 
 type CreateUserInput struct {
@@ -69,28 +67,17 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, "Please provide a valid credentials")
 		return
 	}
-	token, err := CreateToken(user.ID)
+	ts, err := auth.CreateToken(user.ID)
 	if err != nil {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, token)
-}
 
-func CreateToken(userId uint) (string, error) {
-	var err error
-	//Creating Access Token
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
-	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["user_id"] = userId
-	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
-	if err != nil {
-		return "", err
+	tokens := map[string]string{
+		"access_token":  ts.AccessToken,
+		"refresh_token": ts.RefreshToken,
 	}
-	return token, nil
+	c.JSON(http.StatusOK, tokens)
 }
 
 func hashAndSalt(pwd []byte) string {
@@ -111,4 +98,16 @@ func comparePasswords(hashedPwd string, plainPwd []byte) bool {
 	}
 
 	return true
+}
+
+func TokenAuthMiddleware() gin.HandlerFunc {
+  return func(c *gin.Context) {
+     err := auth.TokenValid(c.Request)
+     if err != nil {
+        c.JSON(http.StatusUnauthorized, err.Error())
+        c.Abort()
+        return
+     }
+     c.Next()
+  }
 }

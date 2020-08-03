@@ -4,21 +4,21 @@ import (
 	"log"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
+	"github.com/saedyousef/abwaab-task/auth"
 	"github.com/saedyousef/abwaab-task/controllers"
 )
 
-var (
+var ( 
 	router = gin.Default()
 )
 
 func main() {
-
 	// Connect to DB
 	models.ConnectDatabase()
 
 	router.POST("/login", controllers.Login)
 	router.POST("/signup", controllers.CreateUser)
-	router.POST("/test", controllers.CreateTweet)
+	router.POST("/test", auth.TokenAuthMiddleware(), controllers.CreateTweet)
 	log.Fatal(router.Run(""))
 }
 
