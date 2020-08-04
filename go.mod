@@ -3,6 +3,7 @@ module github.com/saedyousef/abwaab-task
 go 1.14
 
 require (
+	github.com/dghubble/go-twitter v0.0.0-20200725221434-4bc8ad7ad1b4 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis/v7 v7.4.0
