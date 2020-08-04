@@ -16,8 +16,12 @@ func main() {
 	// Connect to DB
 	models.ConnectDatabase()
 
+	// No authentication is required.
 	router.POST("/login", controllers.Login)
 	router.POST("/signup", controllers.CreateUser)
+	router.POST("/refresh", auth.Refresh)
+	
+	// Authentication required.
 	router.POST("/test", auth.TokenAuthMiddleware(), controllers.CreateTweet)
 	log.Fatal(router.Run(""))
 }
