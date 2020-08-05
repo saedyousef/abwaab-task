@@ -20,6 +20,7 @@ func main() {
 	router.POST("/login", controllers.Login)
 	router.POST("/signup", controllers.CreateUser)
 	router.POST("/refresh", auth.Refresh)
+	router.GET("/twitter/search", controllers.SearchTweets)
 	
 	// Authentication required.
 	router.POST("/test", auth.TokenAuthMiddleware(), controllers.CreateTweet)

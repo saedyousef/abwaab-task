@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
+	"github.com/saedyousef/abwaab-task/tweeters"
 )
 
 type CreateTweetInput struct {
@@ -24,4 +25,18 @@ func CreateTweet(c *gin.Context) {
 	models.DB.Create(&tweet)
   
 	c.JSON(http.StatusOK, gin.H{"data": tweet})
+}
+
+func SearchTweets(c *gin.Context) {
+	// Validate input
+	url := c.Request.URL.Query()
+	if url["query"] == nil || len(url["query"][0]) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "query param is required"})
+	  	return
+	}
+
+	tweets := tweeters.SearchTweets(url["query"][0])
+	
+	fmt.Println(url["query"][0])
+	c.JSON(http.StatusOK, tweets)
 }
