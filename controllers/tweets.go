@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
-	// "encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
 	"github.com/saedyousef/abwaab-task/tweeters"
@@ -10,10 +10,6 @@ import (
 
 type CreateTweetInput struct {
 	Body  string `json:"body" binding:"required"`
-}
-
-type SearchTweetsInput struct {
-	Query string `json:"query" binfing:"required"` 
 }
 
 func CreateTweet(c *gin.Context) {
@@ -33,15 +29,14 @@ func CreateTweet(c *gin.Context) {
 
 func SearchTweets(c *gin.Context) {
 	// Validate input
-	var input SearchTweetsInput
-	if err := c.ShouldBindJSON(&input); err != nil {
-	  	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	url := c.Request.URL.Query()
+	if url["query"] == nil || len(url["query"][0]) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "query param is required"})
 	  	return
 	}
+
+	tweets := tweeters.SearchTweets(url["query"][0])
 	
-	tweets := tweeters.SearchTweets(input.Query)
-	// var response map[string]interface{}
-	// json.Unmarshal([]byte(tweets), &response)
-  
+	fmt.Println(url["query"][0])
 	c.JSON(http.StatusOK, tweets)
 }
