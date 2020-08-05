@@ -26,11 +26,14 @@ func CreateTweet(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": tweet})
 }
 
+
+// This api call a function that uses Twitter Client to get tweets.
 func SearchTweets(c *gin.Context) {
+
 	// Validate input
 	url := c.Request.URL.Query()
 	if url["query"] == nil || len(url["query"][0]) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "query param is required"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "URL param 'query' is required"})
 	  	return
 	}
 
