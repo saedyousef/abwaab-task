@@ -12,13 +12,15 @@ type error interface {
 
 func SearchTweets(query string) []string {
 
-	var e []string
+	// Erros Array
+	var errorsArray []string
+
 	// load .env file
 	err := godotenv.Load(".env")
 
 	if err != nil {
-		er := append(e, err.Error())
-		return er
+		e := append(errorsArray, err.Error())
+		return e
 	}
 
 	config := oauth1.NewConfig(os.Getenv("CONSUMER_KEY"), os.Getenv("CONSUMER_SECRET"))
