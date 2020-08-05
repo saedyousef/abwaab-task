@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/saedyousef/abwaab-task/models"
@@ -37,6 +36,5 @@ func SearchTweets(c *gin.Context) {
 
 	tweets := tweeters.SearchTweets(url["query"][0])
 	
-	fmt.Println(url["query"][0])
 	c.JSON(http.StatusOK, tweets)
 }
