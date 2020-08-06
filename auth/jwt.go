@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"fmt"
-	"strings"
 	"os"
-	"net/http"
+	"fmt"
 	"time"
+	"strings"
+	"net/http"
 	"strconv"
 	"github.com/twinj/uuid"
 	"github.com/gin-gonic/gin"
@@ -38,7 +38,7 @@ func CreateToken(userid uint64) (*TokenDetails, error) {
   
 	var err error
 	//Creating Access Token
-	os.Setenv("ACCESS_SECRET", "jdnfksdmfksd") //this should be in an env file
+	os.Getenv("JWT_ACCESS_SECRET") //this should be in an env file
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
 	atClaims["access_uuid"] = td.AccessUuid
@@ -50,7 +50,7 @@ func CreateToken(userid uint64) (*TokenDetails, error) {
 	   return nil, err
 	}
 	//Creating Refresh Token
-	os.Setenv("REFRESH_SECRET", "mcmvmkmsdnfsdmfdsjf") //this should be in an env file
+	os.Getenv("REFRESH_SECRET") //this should be in an env file
 	rtClaims := jwt.MapClaims{}
 	rtClaims["refresh_uuid"] = td.RefreshUuid
 	rtClaims["user_id"] = userid
@@ -63,6 +63,7 @@ func CreateToken(userid uint64) (*TokenDetails, error) {
 	return td, nil
 }
 
+// Getting the token from the request header.
 func ExtractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
 	
@@ -101,6 +102,7 @@ func TokenValid(r *http.Request) error {
 	return nil
 }
 
+// Getting user's data from the authToken.
 func ExtractTokenMetadata(r *http.Request) (*AccessDetails, error) {
 	token, err := VerifyToken(r)
 	if err != nil {

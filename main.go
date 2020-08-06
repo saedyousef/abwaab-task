@@ -23,7 +23,7 @@ func main() {
 	router.GET("/twitter/search", controllers.SearchTweets)
 	
 	// Authentication required.
-	router.POST("/test", auth.TokenAuthMiddleware(), controllers.CreateTweet)
+	router.POST("/tweets/create", auth.TokenAuthMiddleware(), controllers.CreateTweet)
 	log.Fatal(router.Run(""))
 }
 
