@@ -8,9 +8,10 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"github.com/saedyousef/abwaab-task/models"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/saedyousef/abwaab-task/auth"
+	"github.com/saedyousef/abwaab-task/pwdhasher"
+	"github.com/saedyousef/abwaab-task/models"
 )
 
 // User signup struct.
