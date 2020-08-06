@@ -24,17 +24,35 @@ func SearchTweets(c *gin.Context) {
 	}
 
 	tweets := tweeters.SearchTweets(url["query"][0])
-	
+
+	// Extracting the token to get the userid.
+	tokenAuth, err := auth.ExtractTokenMetadata(c.Request)
+
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, "unauthorized")
+		return
+	}
+
+	for _, tweet := range tweets {
+		go SaveTweet(tweet, tokenAuth.UserId)
+	}
+
 	c.JSON(http.StatusOK, tweets)
+}
+
+
+func SaveTweet(body string, userId uint64) {
+	tweet := models.Tweet{Body: body, UserID: userId}
+	models.DB.Create(&tweet)
 }
 
 func CreateTweet(c *gin.Context) {
 	var input CreateTweetInput
 
-  	// Validate input
+		// Validate input
 	if err := c.ShouldBindJSON(&input); err != nil {
-	  	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	  	return
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
 	}
 
 	// Extracting the token to get the userid.
@@ -49,4 +67,23 @@ func CreateTweet(c *gin.Context) {
 	models.DB.Create(&tweet)
 
 	c.JSON(http.StatusCreated, gin.H{"data": tweet})
+}
+
+// Getting tweets for logged in user.
+func GetUserTweets(c *gin.Context) {
+	var tweets []models.Tweet
+
+	err := models.DB.Where("user_id = ?", 142).Order("id desc").Find(&tweets).Error
+	if err != nil {
+		c.JSON(http.StatusBadRequest,  gin.H{"error": err})
+		return
+	}
+
+	if len(tweets) == 0 {
+		c.JSON(http.StatusNotFound,  gin.H{"error": "No tweets found for this user."})
+		return
+	}
+
+
+	c.JSON(http.StatusOK,  gin.H{"data": tweets})
 }

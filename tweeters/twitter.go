@@ -42,7 +42,7 @@ func SearchTweets(query string) []string {
 
 	// Filling the tweets array.
 	for _, tweet := range search.Statuses {
-		tweets = append(tweets, tweet.Text, tweet.CreatedAt)
+		tweets = append(tweets, tweet.Text)
 	}
 
 	return tweets
