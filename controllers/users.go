@@ -1,16 +1,14 @@
 package controllers
 
 import (
-	"log"
 	"time"
 	"bytes"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/saedyousef/abwaab-task/auth"
-	"github.com/saedyousef/abwaab-task/pwdhasher"
+	"github.com/saedyousef/abwaab-task/hasher"
 	"github.com/saedyousef/abwaab-task/models"
 )
 
@@ -50,7 +48,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 	// Create user
-	hashedPwd := hashAndSalt([]byte(input.Password))
+	hashedPwd := hasher.HashAndSalt([]byte(input.Password))
 	user := models.User{Username: input.Username, Password: hashedPwd, Name: input.Name}
 	models.DB.Create(&user)
 
@@ -78,7 +76,7 @@ func Login(c *gin.Context) {
 	}
 	
 	// Checking for credentials.
-	if user.Username != input.Username || !comparePasswords(user.Password, []byte(input.Password)) {
+	if user.Username != input.Username || !hasher.ComparePasswords(user.Password, []byte(input.Password)) {
 		c.JSON(http.StatusUnauthorized, "Please provide a valid credentials")
 		return
 	}
@@ -97,29 +95,6 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, tokens)
-}
-
-// Generate hashed password using salt key.
-func hashAndSalt(pwd []byte) string {
-
-	hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
-	if err != nil {
-		log.Println(err)
-	}
-	return string(hash)
-}
-
-// Caomparing hashed password with a plain password.
-func comparePasswords(hashedPwd string, plainPwd []byte) bool {
-
-	byteHash := []byte(hashedPwd)
-	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
-	if err != nil {
-		log.Println(err)
-		return false
-	}
-
-	return true
 }
 
 // Login user, this function is created to login user after signup.

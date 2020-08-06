@@ -1,4 +1,4 @@
-package pwdhasher
+package hasher
 
 import (
 	"log"
