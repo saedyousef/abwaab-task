@@ -20,10 +20,15 @@ func main() {
 	router.POST("/login", controllers.Login)
 	router.POST("/signup", controllers.CreateUser)
 	router.POST("/refresh", auth.Refresh)
-	router.GET("/twitter/search", controllers.SearchTweets)
 	
 	// Authentication required.
 	router.POST("/tweets/create", auth.TokenAuthMiddleware(), controllers.CreateTweet)
+	router.GET("/twitter/search", auth.TokenAuthMiddleware(), controllers.SearchTweets)
+	router.GET("/tweets", controllers.GetUserTweets)
+	router.GET("/tweets/:tweetid", controllers.TweetDetails)
+	router.POST("/tweets/update/:tweetid", controllers.UpdateTweet)
+	router.DELETE("/tweets/:tweetid/delete", controllers.DeleteTweet)
+	
 	log.Fatal(router.Run(""))
 }
 
