@@ -48,3 +48,48 @@ request body:
 ```
 Check sample request and response from postman in the screenshot.
 ![Signup](screenshots/signup.png)
+
+---
+
+Login API, this api accept POST method, and Content-type : application/json
+request body: 
+```
+{
+    "username": "YOUR_USERNAME",
+    "password": "YOUR_PASSWORD"
+}
+
+```
+Check sample request and response from postman in the screenshot.
+![Signup](screenshots/login.png)
+
+---
+
+Refresh Token API, this api accept POST method, and Content-type : application/json
+request body: 
+```
+{
+    "refresh_token": "YOUR_REFRESH_TOKEN"
+}
+
+```
+Afte your access token is expired you can request this api to refresh your access token by provides your refresh_token
+Check sample request and response from postman in the screenshot.
+![Signup](screenshots/refresh.png)
+
+---
+### How To authorize request?
+
+To authorize a request, in postman Click on Authorization and select Bearer Token and place your access_token that is returned from login, signup or refresh apis.
+
+---
+
+> Twitter Search API
+
+Twitter Search API, this api accept GET method, and requires a string query param "query" and return the first 50 matched results.
+
+Authentication required to make a request on this API.
+
+Check sample request and response from postman in the screenshot.
+![Signup](screenshots/twitter_search.png)
+
