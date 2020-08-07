@@ -158,3 +158,12 @@ Authentication `required` to make a request on this API.
 Check sample request and response from postman in the screenshot.
 
 ![Delete Tweet](screenshots/tweets_list.png)
+
+---
+
+### Referencees
+
+[Gorm](http://gorm.io/docs/index.html)
+[Go-gin](https://godoc.org/)
+[Paginator](https://github.com/biezhi/gorm-paginator/)
+And some Articles on [Medium](https://medium.com/)
