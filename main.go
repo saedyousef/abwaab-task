@@ -17,17 +17,18 @@ func main() {
 	models.ConnectDatabase()
 
 	// No authentication is required.
-	router.POST("/login", controllers.Login)
-	router.POST("/signup", controllers.CreateUser)
-	router.POST("/refresh", auth.Refresh)
+	router.POST("/auth/login", controllers.Login)
+	router.POST("/auth/signup", controllers.CreateUser)
+	router.POST("/auth/refresh", auth.Refresh)
+	router.GET("/tweets/:tweetid", controllers.TweetDetails)
 	
 	// Authentication required.
 	router.POST("/tweets/create", auth.TokenAuthMiddleware(), controllers.CreateTweet)
 	router.GET("/twitter/search", auth.TokenAuthMiddleware(), controllers.SearchTweets)
 	router.GET("/tweets", controllers.GetUserTweets)
-	router.GET("/tweets/:tweetid", controllers.TweetDetails)
-	router.POST("/tweets/update/:tweetid", controllers.UpdateTweet)
-	router.DELETE("/tweets/:tweetid/delete", controllers.DeleteTweet)
+	router.PUT("/tweets/:tweetid/update", auth.TokenAuthMiddleware(), controllers.UpdateTweet)
+	router.DELETE("/tweets/:tweetid/delete", auth.TokenAuthMiddleware(), controllers.DeleteTweet)
+	
 	
 	log.Fatal(router.Run(""))
 }

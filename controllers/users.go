@@ -117,7 +117,7 @@ func loginUser(username string, password string) string{
 	}
 
 	// Preparing the request.
-	request, err := http.NewRequest("POST", "http://127.0.0.1/login", bytes.NewBuffer(requestBody))
+	request, err := http.NewRequest("POST", "http://127.0.0.1/auth/login", bytes.NewBuffer(requestBody))
 	request.Header.Set("Content-type", "application/json")
 
 	if err != nil {
