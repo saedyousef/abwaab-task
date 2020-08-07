@@ -164,6 +164,11 @@ Check sample request and response from postman in the screenshot.
 ### Referencees
 
 [Gorm](http://gorm.io/docs/index.html)
+<br/>
+
 [Go-gin](https://godoc.org/)
+<br/>
+
 [Paginator](https://github.com/biezhi/gorm-paginator/)
+<br/>
 And some Articles on [Medium](https://medium.com/)
